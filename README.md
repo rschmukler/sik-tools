@@ -5,7 +5,7 @@ sane.
 
 ## Commands
 
-### component <component-name>
+### component < name >
 
 Generates a local component and adds it to the local section of `component.json`
 
