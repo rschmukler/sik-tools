@@ -14,6 +14,8 @@ var path = require('path'),
 
 require('colors');
 
+var noop = function() { };
+
 var sik = require('commander');
 
 sik.usage('<component-name> [options]');
@@ -27,7 +29,10 @@ sik.parse(process.argv);
 
 var componentName = sik.args[0];
 
-if (!componentName) sik.help();
+if (!componentName) {
+  sik.help();
+  process.exit();
+}
 
 // Configure Prompt
 prompt.message = "  ";
@@ -54,7 +59,15 @@ if(sik.javascript) {
 }
 if(sik.styles) component.styles = [stylName];
 
-
+// Update Project component.json
+console.log("Updating component.json");
+read(process.cwd() + '/component.json', function(err, data) {
+  if(!err) {
+    var projectComponent = JSON.parse(data);
+    projectComponent.local.push(componentName);
+    write(process.cwd() + '/component.json', JSON.stringify(projectComponent, null, 2), noop);
+  }
+});
 
 prompt.get(['description'], function(err, result) {
   console.log("Generating component.json");
