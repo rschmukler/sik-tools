@@ -60,14 +60,6 @@ if(sik.javascript) {
 }
 if(sik.styles) component.styles = [stylName];
 
-// Update Project component.json
-read(process.cwd() + '/component.json', function(err, data) {
-  if(!err) {
-    var projectComponent = JSON.parse(data);
-    projectComponent.local.push(componentName);
-    write(process.cwd() + '/component.json', JSON.stringify(projectComponent, null, 2), noop);
-  }
-});
 
 prompt.get(['description'], function(err, result) {
   console.log("Outputing component to: ".grey + path.relative(process.cwd(), target));
@@ -75,10 +67,20 @@ prompt.get(['description'], function(err, result) {
   component.description = result.description;
   var output = JSON.stringify(component, null, 2);
   write(target + '/component.json', output, function(err) { });
+
   // Touch Appropriate Files
   var touchFiles = [];
   if(sik.partials || sik.templates) touchFiles.push("template.jade");
   if(sik.styles) touchFiles.push(stylName);
   if(sik.javascript) touchFiles.push(scriptName);
   sikUtils.touchFilesInDir(target, touchFiles);
+
+  // Update Project component.json
+  read(process.cwd() + '/component.json', function(err, data) {
+    if(!err) {
+      var projectComponent = JSON.parse(data);
+      projectComponent.local.push(componentName);
+      write(process.cwd() + '/component.json', JSON.stringify(projectComponent, null, 2), noop);
+    }
+  });
 });
