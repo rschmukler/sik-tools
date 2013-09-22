@@ -18,10 +18,10 @@ var sik = require('commander');
 
 sik.usage('<component-name> [options]');
 
-sik.option('-a, --angular'  , 'create an angular component');
-sik.option('-d, --dir'      , 'directory, default is lib/components');
-sik.option('-s, --styles'   , 'include styling');
-sik.option('-p, --partials' , 'include partials');
+sik.option('-d, --dir'         , 'directory, default is lib/components');
+sik.option('-j, --javascript'  , 'include javascript');
+sik.option('-s, --styles'      , 'include styling');
+sik.option('-p, --partials'    , 'include partials');
 
 sik.parse(process.argv);
 
@@ -37,7 +37,7 @@ prompt.start();
 
 // Create target directory
 var target = process.cwd() + '/' + (sik.dir || 'lib/components') + '/' + componentName;
-console.log("Making target directory: " + target);
+console.log("Making target directory: " + path.relative(process.cwd(), target));
 mkdirp.sync(target);
 
 // Make component.json
@@ -48,23 +48,24 @@ var component = {},
 component.name = componentName;
 component.version = "0.0.1";
 if(sik.partials) component.partials = ["template.jade"];
-if(sik.angular) {
+if(sik.javascript) {
   component.main = scriptName;
   component.scripts = [scriptName];
 }
 if(sik.styles) component.styles = [stylName];
 
 
-// Touch Appropriate Files
-var touchFiles = [];
-if(sik.partials) touchFiles.push("template.jade");
-if(sik.styles) touchFiles.push(stylName);
-if(sik.angular) touchFiles.push(scriptName);
-sikUtils.touchFilesInDir(target, touchFiles);
 
 prompt.get(['description'], function(err, result) {
+  console.log("\tGenerating component.json");
   sikUtils.writeFileMessage("component.json");
   component.description = result.description;
   var output = JSON.stringify(component, null, 2);
   write(target + '/component.json', output, function(err) { });
+  // Touch Appropriate Files
+  var touchFiles = [];
+  if(sik.partials) touchFiles.push("template.jade");
+  if(sik.styles) touchFiles.push(stylName);
+  if(sik.javascript) touchFiles.push(scriptName);
+  sikUtils.touchFilesInDir(target, touchFiles);
 });
