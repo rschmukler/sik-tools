@@ -63,6 +63,6 @@ sikUtils.touchFilesInDir(target, touchFiles);
 prompt.get(['description'], function(err, result) {
   sikUtils.writeFileMessage("component.json");
   component.description = result.description;
-  var output = JSON.stringify(component, null, 4);
+  var output = JSON.stringify(component, null, 2);
   write(target + '/component.json', output, function(err) { });
 });

@@ -1,10 +1,11 @@
 {
   "name": "sik",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "description": "Oppinionated project structuring for express, component and node.",
   "main": "index.js",
   "bin": {
-    "sik": "bin/sik"
+    "sik": "bin/sik",
+    "sik-component": "bin/sik-component"
   },
   "scripts": {
     "test": "mocha"
