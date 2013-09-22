@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "description": "Oppinionated project structuring for express, component and node.",
   "main": "index.js",
+  "bin": {
+    "sik": "bin/sik"
+  },
   "scripts": {
     "test": "mocha"
   },
@@ -19,5 +22,8 @@
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/rschmukler/sik/issues"
+  },
+  "dependencies": {
+    "commander": "~2.0.0"
   }
 }

@@ -1,0 +1,75 @@
+#! /usr/bin/env node
+
+var path = require('path');
+    fs = require('fs');
+    join = path.join;
+    stat = fs.statSync;
+    exists = fs.existsSync;
+    resolve = path.resolve;
+
+
+var sik = require('commander');
+
+// usage
+
+sik
+  .version(require('../package').version)
+  .usage('<command> [options]');
+
+// sub-command help
+
+sik.on('--help', function(){
+  console.log('  Commands:');
+  console.log();
+  console.log('    component               create a component template');
+  console.log();
+  process.exit();
+});
+
+// parse argv
+
+sik.parse(process.argv);
+
+// args void of cmd
+
+var args = process.argv.slice(3);
+
+// command
+
+var cmd = sik.args[0];
+
+// display help
+
+if (!cmd) sik.help();
+
+// executable
+
+var bin = 'sik-' + cmd;
+
+// local or resolve to absolute executable path
+
+var local = join(__dirname, bin);
+
+if (exists(local)) {
+  bin = local;
+} else {
+  bin = process.env.PATH.split(':').reduce(function(binary, p) {
+    p = resolve(p, bin);
+    return exists(p) && stat(p).isFile() ? p : binary;
+  }, bin);
+}
+
+// display help if bin does not exist
+
+if (!exists(bin)) {
+  console.error('\n  %s(1) does not exist', bin);
+  sik.help();
+}
+
+// spawn
+
+var proc = spawn(bin, args, { stdio: 'inherit', customFds: [0, 1, 2] });
+
+proc.on('close', function(code){
+  process.exit(code);
+});
