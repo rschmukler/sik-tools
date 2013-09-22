@@ -24,6 +24,7 @@ sik.option('-d, --dir'         , 'directory, default is lib/components');
 sik.option('-j, --javascript'  , 'include javascript');
 sik.option('-s, --styles'      , 'include styling');
 sik.option('-p, --partials'    , 'include partials');
+sik.option('-t, --templates'   , 'include templates');
 
 sik.parse(process.argv);
 
@@ -53,6 +54,7 @@ var component = {},
 component.name = componentName;
 component.version = "0.0.1";
 if(sik.partials) component.partials = ["template.jade"];
+if(sik.templates) component.partials = ["template.jade"];
 if(sik.javascript) {
   component.main = scriptName;
   component.scripts = [scriptName];
@@ -77,7 +79,7 @@ prompt.get(['description'], function(err, result) {
   write(target + '/component.json', output, function(err) { });
   // Touch Appropriate Files
   var touchFiles = [];
-  if(sik.partials) touchFiles.push("template.jade");
+  if(sik.partials || sik.templates) touchFiles.push("template.jade");
   if(sik.styles) touchFiles.push(stylName);
   if(sik.javascript) touchFiles.push(scriptName);
   sikUtils.touchFilesInDir(target, touchFiles);
