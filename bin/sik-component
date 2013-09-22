@@ -43,7 +43,6 @@ prompt.start();
 
 // Create target directory
 var target = process.cwd() + '/' + (sik.dir || 'lib/components') + '/' + componentName;
-console.log("Making target directory: " + path.relative(process.cwd(), target));
 mkdirp.sync(target);
 
 // Make component.json
@@ -62,7 +61,6 @@ if(sik.javascript) {
 if(sik.styles) component.styles = [stylName];
 
 // Update Project component.json
-console.log("Updating component.json");
 read(process.cwd() + '/component.json', function(err, data) {
   if(!err) {
     var projectComponent = JSON.parse(data);
@@ -72,7 +70,7 @@ read(process.cwd() + '/component.json', function(err, data) {
 });
 
 prompt.get(['description'], function(err, result) {
-  console.log("Generating component.json");
+  console.log("Outputing component to: ".grey + path.relative(process.cwd(), target));
   sikUtils.writeFileMessage("component.json");
   component.description = result.description;
   var output = JSON.stringify(component, null, 2);
