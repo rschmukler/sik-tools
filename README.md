@@ -3,14 +3,14 @@
 Make your node/express applications have a project structure that keeps you
 sane.
 
-# Commands
+## Commands
 
-## component <component-name>
+### component <component-name>
 
 Generates a local component and adds it to the local section of `component.json`
 
 
-### Options
+#### Options
 
 * `-d, --dir` - set the target directory for the component. By default this is
   `lib/components`.
@@ -27,11 +27,11 @@ Generates a local component and adds it to the local section of `component.json`
 * `-t, --template` - mark the component to include template file named
   `component-name.jade`
 
-### Example
+#### Example
 
     sik component -jsp some-component
 
-    Generates:
+Generates:
 
        lib/components/some-component
           -> component.json
@@ -39,7 +39,7 @@ Generates a local component and adds it to the local section of `component.json`
           -> some-component.styl
           -> template.jade
 
- With a component.json of:
+component.json:
 
     {
       "name": "some-component",
