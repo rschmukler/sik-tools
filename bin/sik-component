@@ -20,12 +20,12 @@ var sik = require('commander');
 
 sik.usage('<component-name> [options]');
 
-sik.option('-d, --dir'         , 'directory, default is lib/components');
-sik.option('-j, --javascript'  , 'include javascript');
-sik.option('-l, --locals'      , 'add local dependencies to component');
-sik.option('-p, --partials'    , 'include partials');
-sik.option('-s, --styles'      , 'include styling');
-sik.option('-t, --templates'   , 'include templates');
+sik.option('-d, --dir'             , 'directory, default is lib/components');
+sik.option('-j, --javascript'      , 'include javascript');
+sik.option('-l, --locals <locals>' , 'add <local> dependencies to component');
+sik.option('-p, --partials'        , 'include partials');
+sik.option('-s, --styles'          , 'include styling');
+sik.option('-t, --templates'       , 'include templates');
 
 sik.parse(process.argv);
 
