@@ -18,18 +18,21 @@ Generates a local component and adds it to the local section of `component.json`
 * `-j, --javascript` - mark the component to include js file named
   `component-name.js`
 
-* `-s, --styles` - mark the component to include styl file named
-  `component-name.styl`
+* `-l, --locals` - Comma delimited list for use in `component.json` 
+  locals section
 
 * `-p, --partials` - mark the component to include partial file named
   `component-name.jade`
+
+* `-s, --styles` - mark the component to include styl file named
+  `component-name.styl`
 
 * `-t, --template` - mark the component to include template file named
   `component-name.jade`
 
 #### Example
 
-    sik component -jsp some-component
+    sik component -jsp -l some-dependency some-component
 
 Generates:
 
@@ -53,6 +56,9 @@ component.json:
       ],
       "styles": [
         "some-component.styl"
+      ],
+      "local": [
+        "some-dependency"
       ],
       "description": "Description was prompted for"
     }

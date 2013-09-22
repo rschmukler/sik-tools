@@ -22,8 +22,9 @@ sik.usage('<component-name> [options]');
 
 sik.option('-d, --dir'         , 'directory, default is lib/components');
 sik.option('-j, --javascript'  , 'include javascript');
-sik.option('-s, --styles'      , 'include styling');
+sik.option('-l, --locals'      , 'add local dependencies to component');
 sik.option('-p, --partials'    , 'include partials');
+sik.option('-s, --styles'      , 'include styling');
 sik.option('-t, --templates'   , 'include templates');
 
 sik.parse(process.argv);
@@ -58,6 +59,7 @@ if(sik.javascript) {
   component.main = scriptName;
   component.scripts = [scriptName];
 }
+if(sik.locals) component.local = sik.locals.split(',').map(function(l) { return l.trim(); });
 if(sik.styles) component.styles = [stylName];
 
 
