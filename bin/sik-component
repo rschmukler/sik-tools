@@ -31,7 +31,7 @@ if (!componentName) sik.help();
 
 // Configure Prompt
 prompt.message = "  ";
-prompt.delimiter = "# ";
+prompt.delimiter = " # ";
 prompt.start();
 
 
@@ -57,7 +57,7 @@ if(sik.styles) component.styles = [stylName];
 
 
 prompt.get(['description'], function(err, result) {
-  console.log("\tGenerating component.json");
+  console.log("Generating component.json");
   sikUtils.writeFileMessage("component.json");
   component.description = result.description;
   var output = JSON.stringify(component, null, 2);
