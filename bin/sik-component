@@ -27,6 +27,8 @@ sik.parse(process.argv);
 
 var componentName = sik.args[0];
 
+if (!componentName) sik.help();
+
 // Configure Prompt
 prompt.message = "  ";
 prompt.delimiter = "# ";
