@@ -1,0 +1,68 @@
+#! /usr/bin/env node
+
+var path = require('path'),
+    fs = require('fs'),
+    read = fs.readFile,
+    write = fs.writeFile,
+    mkdirp = require('mkdirp'),
+    join = path.join,
+    stat = fs.statSync,
+    exists = fs.existsSync,
+    sikUtils = require('../index.js'),
+    prompt = require('prompt'),
+    resolve = path.resolve;
+
+require('colors');
+
+var sik = require('commander');
+
+sik.usage('<component-name> [options]');
+
+sik.option('-a, --angular'  , 'create an angular component');
+sik.option('-d, --dir'      , 'directory, default is lib/components');
+sik.option('-s, --styles'   , 'include styling');
+sik.option('-p, --partials' , 'include partials');
+
+sik.parse(process.argv);
+
+var componentName = sik.args[0];
+
+// Configure Prompt
+prompt.message = "  ";
+prompt.delimiter = "# ";
+prompt.start();
+
+
+// Create target directory
+var target = process.cwd() + '/' + (sik.dir || 'lib/components') + '/' + componentName;
+console.log("Making target directory: " + target);
+mkdirp.sync(target);
+
+// Make component.json
+var component = {},
+    scriptName = componentName + ".js",
+    stylName = componentName + ".styl";
+
+component.name = componentName;
+component.version = "0.0.1";
+if(sik.partials) component.partials = ["template.jade"];
+if(sik.angular) {
+  component.main = scriptName;
+  component.scripts = [scriptName];
+}
+if(sik.styles) component.styles = [stylName];
+
+
+// Touch Appropriate Files
+var touchFiles = [];
+if(sik.partials) touchFiles.push("template.jade");
+if(sik.styles) touchFiles.push(stylName);
+if(sik.angular) touchFiles.push(scriptName);
+sikUtils.touchFilesInDir(target, touchFiles);
+
+prompt.get(['description'], function(err, result) {
+  sikUtils.writeFileMessage("component.json");
+  component.description = result.description;
+  var output = JSON.stringify(component, null, 4);
+  write(target + '/component.json', output, function(err) { });
+});

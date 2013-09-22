@@ -1,11 +1,13 @@
 #! /usr/bin/env node
 
-var path = require('path');
-    fs = require('fs');
-    join = path.join;
-    stat = fs.statSync;
-    exists = fs.existsSync;
-    resolve = path.resolve;
+var path = require('path'),
+    fs = require('fs'),
+    join = path.join,
+    stat = fs.statSync,
+    exists = fs.existsSync,
+    resolve = path.resolve,
+    cp = require('child_process'),
+    spawn = cp.spawn;
 
 
 var sik = require('commander');
