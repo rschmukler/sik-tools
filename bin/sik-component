@@ -4,11 +4,12 @@ var path = require('path'),
     fs = require('fs'),
     read = fs.readFile,
     write = fs.writeFile,
-    mkdirp = require('mkdirp'),
     join = path.join,
     stat = fs.statSync,
     exists = fs.existsSync,
-    sikUtils = require('../index.js'),
+    sik = require('../index.js'),
+    utils = sik.utils,
+    runner = sik.runner,
     prompt = require('prompt'),
     resolve = path.resolve;
 
@@ -16,73 +17,72 @@ require('colors');
 
 var noop = function() { };
 
-var sik = require('commander');
+var program = require('commander');
 
-sik.usage('<component-name> [options]');
+program.usage('<component-name> [options]');
 
-sik.option('-d, --dir'             , 'directory, default is lib/components');
-sik.option('-j, --javascript'      , 'include javascript');
-sik.option('-l, --locals <locals>' , 'add <local> dependencies to component');
-sik.option('-p, --partials'        , 'include partials');
-sik.option('-s, --styles'          , 'include styling');
-sik.option('-t, --templates'       , 'include templates');
 
-sik.parse(process.argv);
 
-var componentName = sik.args[0];
+program.option('-d, --dir'             , 'directory, default is lib/components');
+program.option('-j, --javascript [scripts]'      , 'include javascript [component-name.js]');
+program.option('-l, --locals <locals>' , 'add <local> dependencies to component');
+program.option('-p, --partials [partials]'        , 'include partials [template.jade]');
+program.option('-s, --styles [styles]'          , 'include styling [component-name.styl]');
+program.option('-t, --templates [templates]'       , 'include templates [template.jade]');
 
-if (!componentName) {
-  sik.help();
+program.parse(process.argv);
+
+var componentName = program.args[0];
+
+
+
+if (!componentName.length) {
+  program.help();
   process.exit();
 }
 
-// Configure Prompt
-prompt.message = "  ";
-prompt.delimiter = " # ";
-prompt.start();
 
+var config = {
+  resourceName: 'component',
+  localComponent: componentName,
+  target: process.cwd() + '/' + (program.dir || 'lib/components') + '/' + componentName,
+  touchFiles: []
+};
 
-// Create target directory
-var target = process.cwd() + '/' + (sik.dir || 'lib/components') + '/' + componentName;
-mkdirp.sync(target);
+var extensionMap = {
+  'partials': 'jade',
+  'templates': 'jade',
+  'styles': 'styl',
+  'scripts': 'js'
+};
+
+// Handle Defaults
+if(program.javascript === true) program.javascript = componentName + '.js';
+if(program.styles === true) program.styles = componentName + '.styl';
+if(program.templates === true) program.templates = 'template.jade';
+if(program.partials === true) program.partials = 'template.jade';
+
 
 // Make component.json
-var component = {},
-    scriptName = componentName + ".js",
-    stylName = componentName + ".styl";
+var component = {
+  name: componentName,
+  version: "0.0.1"
+};
 
-component.name = componentName;
-component.version = "0.0.1";
-if(sik.partials) component.partials = ["template.jade"];
-if(sik.templates) component.partials = ["template.jade"];
-if(sik.javascript) {
-  component.main = scriptName;
-  component.scripts = [scriptName];
-}
-if(sik.locals) component.local = sik.locals.split(',').map(function(l) { return l.trim(); });
-if(sik.styles) component.styles = [stylName];
-
-
-prompt.get(['description'], function(err, result) {
-  console.log("Outputing component to: ".grey + path.relative(process.cwd(), target));
-  sikUtils.writeFileMessage("component.json");
-  component.description = result.description;
-  var output = JSON.stringify(component, null, 2);
-  write(target + '/component.json', output, function(err) { });
-
-  // Touch Appropriate Files
-  var touchFiles = [];
-  if(sik.partials || sik.templates) touchFiles.push("template.jade");
-  if(sik.styles) touchFiles.push(stylName);
-  if(sik.javascript) touchFiles.push(scriptName);
-  sikUtils.touchFilesInDir(target, touchFiles);
-
-  // Update Project component.json
-  read(process.cwd() + '/component.json', function(err, data) {
-    if(!err) {
-      var projectComponent = JSON.parse(data);
-      projectComponent.local.push(componentName);
-      write(process.cwd() + '/component.json', JSON.stringify(projectComponent, null, 2), noop);
-    }
-  });
+['partials', 'templates', 'styles', 'locals'].forEach(function(x) {
+  if(program[x]) {
+    component[x] = utils.parseOptionArray(program[x], extensionMap[x]);
+    config.touchFiles = config.touchFiles.concat(component[x]);
+  }
 });
+
+if(program.javascript) {
+  component.scripts = utils.parseOptionArray(program.javascript);
+  component.main = component.scripts[0];
+  config.touchFiles = config.touchFiles.concat(component.scripts);
+}
+component._prompts = ['description'];
+
+config.component = component;
+
+runner(config);
