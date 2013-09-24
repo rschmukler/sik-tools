@@ -1,21 +1,10 @@
 #! /usr/bin/env node
 
-var path = require('path'),
-    fs = require('fs'),
-    read = fs.readFile,
-    write = fs.writeFile,
-    join = path.join,
-    stat = fs.statSync,
-    exists = fs.existsSync,
-    sik = require('../index.js'),
+var sik = require('../index.js'),
     utils = sik.utils,
-    runner = sik.runner,
-    prompt = require('prompt'),
-    resolve = path.resolve;
+    runner = sik.runner;
 
 require('colors');
-
-var noop = function() { };
 
 var program = require('commander');
 
