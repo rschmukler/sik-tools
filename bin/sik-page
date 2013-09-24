@@ -1,0 +1,69 @@
+#! /usr/bin/env node
+
+var sik = require('../index.js'),
+    utils = sik.utils,
+    runner = sik.runner;
+
+var program = require('commander');
+
+program.usage('<page-name> [options]');
+
+
+
+program.option('-d, --dir'                     , 'directory, default is lib/pages');
+program.option('-l, --locals <locals>'         , 'add <local> dependencies to page');
+
+program.parse(process.argv);
+
+var pageName = program.args[0].slice(-5) == '-page' ? program.args[0] : program.args[0] + '-page';
+
+
+
+if (!pageName.length) {
+  program.help();
+  process.exit();
+}
+
+
+var config = {
+  resourceName: 'page',
+  localComponent: pageName,
+  target: process.cwd() + '/' + (program.dir || 'lib/pages') + '/' + pageName,
+  templates: {
+    '{pageName}.js': 'angular-page.js'
+  },
+  templateVarsUseLocalComponent: true,
+  templateVars: {
+    projectName: '$component.name',
+    pageName: pageName,
+    pageNameTransformed: utils.convertToCapitalized(pageName)
+  },
+  touchFiles: []
+};
+
+// Handle Defaults
+program.styles = pageName + '.styl';
+program.partials = 'template.jade';
+
+
+// Make component.json
+var component = {
+  name: pageName,
+  version: "0.0.1"
+};
+
+component.scripts = [pageName + '.js'];
+component.main = component.scripts[0];
+
+['partials', 'styles', 'locals'].forEach(function(x) {
+  if(program[x]) {
+    component[x] = utils.parseOptionArray(program[x]);
+    config.touchFiles = config.touchFiles.concat(component[x]);
+  }
+});
+
+component._prompts = ['description'];
+
+config.component = component;
+
+runner(config);

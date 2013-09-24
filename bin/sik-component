@@ -4,20 +4,18 @@ var sik = require('../index.js'),
     utils = sik.utils,
     runner = sik.runner;
 
-require('colors');
-
 var program = require('commander');
 
 program.usage('<component-name> [options]');
 
 
 
-program.option('-d, --dir'             , 'directory, default is lib/components');
-program.option('-j, --javascript [scripts]'      , 'include javascript [component-name.js]');
-program.option('-l, --locals <locals>' , 'add <local> dependencies to component');
-program.option('-p, --partials [partials]'        , 'include partials [template.jade]');
-program.option('-s, --styles [styles]'          , 'include styling [component-name.styl]');
-program.option('-t, --templates [templates]'       , 'include templates [template.jade]');
+program.option('-d, --dir'                     , 'directory, default is lib/components');
+program.option('-j, --javascript [scripts]'    , 'include javascript [component-name.js]');
+program.option('-l, --locals <locals>'         , 'add <local> dependencies to component');
+program.option('-p, --partials [partials]'     , 'include partials [template.jade]');
+program.option('-s, --styles [styles]'         , 'include styling [component-name.styl]');
+program.option('-t, --templates [templates]'   , 'include templates [template.jade]');
 
 program.parse(process.argv);
 

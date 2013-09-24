@@ -62,3 +62,50 @@ component.json:
       ],
       "description": "Description was prompted for"
     }
+
+### page < name >
+
+Generates a local page with a angular page template and adds it to the local section of `component.json`
+
+
+#### Options
+
+* `-d, --dir` - set the target directory for the component. By default this is
+  `lib/pages`.
+
+* `-l, --locals` - Comma delimited list for use in `component.json` 
+  locals section
+
+
+#### Example
+
+    sik page -l some-dependency some-page
+
+Generates:
+
+       lib/pages/some-page
+          -> component.json
+          -> some-page.js
+          -> some-page.styl
+          -> template.jade
+
+component.json:
+
+    {
+      "name": "some-page",
+      "version": "0.0.1",
+      "partials": [
+        "template.jade"
+      ],
+      "main": "some-page.js",
+      "scripts": [
+        "some-page.js"
+      ],
+      "styles": [
+        "some-page.styl"
+      ],
+      "local": [
+        "some-dependency"
+      ],
+      "description": "Description was prompted for"
+    }
