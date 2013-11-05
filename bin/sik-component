@@ -23,7 +23,7 @@ var componentName = program.args[0];
 
 
 
-if (!componentName.length) {
+if (!componentName) {
   program.help();
   process.exit();
 }

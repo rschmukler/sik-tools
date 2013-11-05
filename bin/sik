@@ -24,6 +24,7 @@ sik.on('--help', function(){
   console.log('  Commands:');
   console.log();
   console.log('    component               create a component template');
+  console.log('    page                    create a page template');
   console.log();
   process.exit();
 });

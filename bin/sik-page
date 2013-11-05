@@ -19,7 +19,7 @@ var pageName = program.args[0].slice(-5) == '-page' ? program.args[0] : program.
 
 
 
-if (!pageName.length) {
+if (!pageName) {
   program.help();
   process.exit();
 }
