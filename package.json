@@ -1,18 +1,19 @@
 {
-  "name": "sik",
+  "name": "sik-tools",
   "version": "0.0.1",
-  "description": "Oppinionated project structuring for express, component and node.",
+  "description": "Command line generators for Sik",
   "main": "index.js",
   "bin": {
     "sik": "bin/sik",
-    "sik-component": "bin/sik-component"
+    "sik-component": "bin/sik-component",
+    "sik-page": "bin/sik-page"
   },
   "scripts": {
     "test": "mocha"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/rschmukler/sik"
+    "url": "git://github.com/rschmukler/sik-tools"
   },
   "keywords": [
     "sik",
@@ -22,7 +23,7 @@
   "author": "Ryan Schmukler <ryan@slingingcode.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/rschmukler/sik/issues"
+    "url": "https://github.com/rschmukler/sik-tools/issues"
   },
   "dependencies": {
     "commander": "~2.0.0",

@@ -1,7 +1,6 @@
-# Sik
+# Sik-Tools
 
-Make your node/express applications have a project structure that keeps you
-sane.
+Command line tools/generators for [sik](http://github.com/rschmukler/sik)
 
 ## Commands
 
