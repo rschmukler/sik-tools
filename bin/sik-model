@@ -1,0 +1,45 @@
+#! /usr/bin/env node
+
+var sik = require('../index.js'),
+    utils = sik.utils,
+    runner = sik.runner;
+
+var program = require('commander');
+
+program.usage('<model-name> [options]');
+
+program.option('-d, --dir'      ,     'target directory, default is lib/models');
+program.option('-p, --presenter',     'create a presenter and add it to the model');
+
+program.parse(process.argv);
+
+var modelName = program.args[0].toLowerCase();
+
+if (!modelName) {
+  program.help();
+  process.exit();
+}
+
+var config = {
+  resourceName: modelName,
+  target: process.cwd() + '/' + (program.dir || 'lib/models') + '/' + modelName + '-model',
+  templates: {
+    'index.js': 'model-template.js'
+  },
+  templateVars : {
+    modelName: modelName,
+    capitalizedModelName: utils.convertToCapitalized(modelName)
+  },
+  touchFiles: []
+};
+
+if(program.presenter) {
+  config.templates['presenter.js'] = 'model-presenter-template.js';
+  config.templateVars.presenterString = [
+    "",
+    config.templateVars.capitalizedModelName + ".use(require(\"./presenter.js\"));",
+    ""
+  ].join("\n");
+}
+
+runner(config);
