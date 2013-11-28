@@ -13,12 +13,14 @@ program.option('-p, --presenter',     'create a presenter and add it to the mode
 
 program.parse(process.argv);
 
-var modelName = program.args[0].toLowerCase();
+var modelName = program.args[0];
 
 if (!modelName) {
   program.help();
   process.exit();
 }
+
+modelName = modelName.toLowerCase();
 
 var config = {
   resourceName: modelName,

@@ -23,6 +23,7 @@ sik
 sik.on('--help', function(){
   console.log('  Commands:');
   console.log();
+  console.log('    api                     create an API');
   console.log('    component               create a component');
   console.log('    model                   create a model');
   console.log('    page                    create a page');

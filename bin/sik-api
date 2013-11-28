@@ -1,0 +1,52 @@
+#! /usr/bin/env node
+
+var sik = require('../index.js'),
+    utils = sik.utils,
+    runner = sik.runner;
+
+var program = require('commander');
+
+program.usage('<api-name> [options]');
+
+program.option('-d, --dir'            ,     'target directory, default is lib/api');
+program.option('-m, --model <models>' ,     'auto-import models');
+
+program.parse(process.argv);
+
+var apiName = program.args[0];
+
+if (!apiName) {
+  program.help();
+  process.exit();
+}
+
+apiName = apiName.toLowerCase();
+
+var config = {
+  resourceName: apiName,
+  target: process.cwd() + '/' + (program.dir || 'lib/api'),
+  templates: {
+    '{apiName}-api.js': 'api-template.js'
+  },
+  templateVars : {
+    apiName: apiName,
+    modelString: ''
+  },
+  touchFiles: []
+};
+
+if(program.model) {
+  debugger;
+  var models = utils.parseOptionArray(program.model),
+      capitalizedModels = models.map(utils.convertToCapitalized);
+
+  var modelString = "var " + capitalizedModels[0] + " = require('" + models[0] +"-model')";
+
+  for(var i = 1; i < models.length ; ++i) {
+    modelString += ",\n    " + capitalizedModels[i] + " = require('" + models[i] +"-model')";
+  }
+  modelString += ";\n\n";
+  config.templateVars.modelString = modelString;
+}
+
+runner(config);
