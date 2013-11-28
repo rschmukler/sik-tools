@@ -36,7 +36,6 @@ var config = {
 };
 
 if(program.model) {
-  debugger;
   var models = utils.parseOptionArray(program.model),
       capitalizedModels = models.map(utils.convertToCapitalized);
 
