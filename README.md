@@ -4,6 +4,35 @@ Command line tools/generators for [sik](http://github.com/rschmukler/sik)
 
 ## Commands
 
+### api < name >
+
+Generates an express-based sik API at `lib/api/name-api.js`.
+
+#### Options
+
+* `-d, --dir` - set the target directory for the api. By default this is
+  `lib/api`.
+* `-m, --models` - Auto import models into the API.
+
+#### Example
+
+```
+sik api users -m user
+```
+
+Generates:
+
+lib/api/users-api.js
+
+```js
+var User = require('user-model');
+
+var app = module.exports = require('sik')();
+
+app.get('/api/...', function(req, res, next) {
+});
+```
+
 ### component < name >
 
 Generates a local component and adds it to the local section of `component.json`
