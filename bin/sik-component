@@ -12,7 +12,7 @@ program.usage('<component-name> [options]');
 
 program.option('-d, --dir'                     , 'directory, default is lib/components');
 program.option('-j, --javascript [scripts]'    , 'include javascript [component-name.js]');
-program.option('-l, --locals <locals>'         , 'add <local> dependencies to component');
+program.option('-l, --local <local>'           , 'add <local> dependencies to component');
 program.option('-p, --partials [partials]'     , 'include partials [template.jade]');
 program.option('-s, --styles [styles]'         , 'include styling [component-name.styl]');
 program.option('-t, --templates [templates]'   , 'include templates [template.jade]');
@@ -56,7 +56,7 @@ var component = {
   version: "0.0.1"
 };
 
-['partials', 'templates', 'styles', 'locals'].forEach(function(x) {
+['partials', 'templates', 'styles', 'local'].forEach(function(x) {
   if(program[x]) {
     component[x] = utils.parseOptionArray(program[x], extensionMap[x]);
     if(x != 'locals') {
