@@ -59,7 +59,7 @@ var component = {
 ['partials', 'templates', 'styles', 'local'].forEach(function(x) {
   if(program[x]) {
     component[x] = utils.parseOptionArray(program[x], extensionMap[x]);
-    if(x != 'locals') {
+    if(x != 'local') {
       config.touchFiles = config.touchFiles.concat(component[x]);
     }
   }

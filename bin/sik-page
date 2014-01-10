@@ -61,10 +61,12 @@ var component = {
 component.scripts = [pageName + '.js'];
 component.main = component.scripts[0];
 
-['partials', 'styles', 'locals'].forEach(function(x) {
+['partials', 'styles', 'local'].forEach(function(x) {
   if(program[x]) {
     component[x] = utils.parseOptionArray(program[x]);
-    config.touchFiles = config.touchFiles.concat(component[x]);
+    if(x != 'local') {
+      config.touchFiles = config.touchFiles.concat(component[x]);
+    }
   }
 });
 
