@@ -26,6 +26,7 @@ sik.on('--help', function(){
   console.log('    api                     create an API');
   console.log('    component               create a component');
   console.log('    model                   create a model');
+  console.log('    express-page            create an express page');
   console.log('    page                    create a page');
   console.log();
   process.exit();

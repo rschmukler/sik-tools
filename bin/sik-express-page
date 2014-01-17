@@ -1,0 +1,31 @@
+#! /usr/bin/env node
+
+var sik = require('../index.js'),
+    utils = sik.utils,
+    runner = sik.runner;
+
+var program = require('commander');
+
+program.usage('<page-name> [options]');
+program.option('-d, --dir', 'directory, default is lib/express-pages');
+
+program.parse(process.argv);
+
+var pageName = program.args[0];
+
+if(!pageName) {
+  program.help();
+  process.exit();
+}
+
+var config = {
+  resourceName: 'express-page',
+  target: process.cwd() + '/' + (program.dir || 'lib/express-pages') + '/' + pageName,
+  templates: {
+    'routes.js': 'express-routes.js'
+  },
+  touchFiles: [],
+  templateVars: {}
+};
+
+runner(config);
