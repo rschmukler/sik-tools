@@ -12,7 +12,6 @@ program.usage('<component-name> [options]');
 
 program.option('-d, --dir'                     , 'directory, default is lib/components');
 program.option('-j, --javascript [scripts]'    , 'include javascript [component-name.js]');
-program.option('-l, --local <local>'           , 'add <local> dependencies to component');
 program.option('-p, --partials [partials]'     , 'include partials [template.jade]');
 program.option('-s, --styles [styles]'         , 'include styling [component-name.styl]');
 program.option('-t, --templates [templates]'   , 'include templates [template.jade]');
@@ -50,28 +49,15 @@ if(program.templates === true) program.templates = 'template.jade';
 if(program.partials === true) program.partials = 'template.jade';
 
 
-// Make component.json
-var component = {
-  name: componentName,
-  version: "0.0.1"
-};
-
-['partials', 'templates', 'styles', 'local'].forEach(function(x) {
+['partials', 'templates', 'styles'].forEach(function(x) {
   if(program[x]) {
-    component[x] = utils.parseOptionArray(program[x], extensionMap[x]);
-    if(x != 'local') {
-      config.touchFiles = config.touchFiles.concat(component[x]);
-    }
+    var files = utils.parseOptionArray(program[x], extensionMap[x]);
+    config.touchFiles = config.touchFiles.concat(files);
   }
 });
 
 if(program.javascript) {
-  component.scripts = utils.parseOptionArray(program.javascript);
-  component.main = component.scripts[0];
-  config.touchFiles = config.touchFiles.concat(component.scripts);
+  config.touchFiles = config.touchFiles.concat(program.javascript);
 }
-component._prompts = ['description'];
-
-config.component = component;
 
 runner(config);

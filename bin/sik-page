@@ -11,7 +11,6 @@ program.usage('<page-name> [options]');
 
 
 program.option('-d, --dir'                     , 'directory, default is lib/pages');
-program.option('-l, --locals <locals>'         , 'add <local> dependencies to page');
 
 program.parse(process.argv);
 
@@ -38,7 +37,6 @@ var config = {
   templates: {
     '{pageName}.js': 'angular-page.js'
   },
-  templateVarsUseLocalComponent: true,
   templateVars: {
     projectName: '$component.name',
     pageName: pageName,
@@ -52,26 +50,11 @@ program.styles = pageName + '.styl';
 program.partials = 'template.jade';
 
 
-// Make component.json
-var component = {
-  name: pageName,
-  version: "0.0.1"
-};
-
-component.scripts = [pageName + '.js'];
-component.main = component.scripts[0];
-
-['partials', 'styles', 'local'].forEach(function(x) {
+['partials', 'styles'].forEach(function(x) {
   if(program[x]) {
-    component[x] = utils.parseOptionArray(program[x]);
-    if(x != 'local') {
-      config.touchFiles = config.touchFiles.concat(component[x]);
-    }
+    var files = utils.parseOptionArray(program[x]);
+    config.touchFiles = config.touchFiles.concat(files);
   }
 });
-
-component._prompts = ['description'];
-
-config.component = component;
 
 runner(config);
