@@ -12,7 +12,6 @@ program.usage('<component-name> [options]');
 
 program.option('-d, --dir'                     , 'directory, default is lib/components');
 program.option('-j, --javascript [scripts]'    , 'include javascript [component-name.js]');
-program.option('-p, --partials [partials]'     , 'include partials [template.jade]');
 program.option('-s, --styles [styles]'         , 'include styling [component-name.styl]');
 program.option('-t, --templates [templates]'   , 'include templates [template.jade]');
 
@@ -36,7 +35,6 @@ var config = {
 };
 
 var extensionMap = {
-  'partials': 'jade',
   'templates': 'jade',
   'styles': 'styl',
   'scripts': 'js'
@@ -46,10 +44,9 @@ var extensionMap = {
 if(program.javascript === true) program.javascript = componentName + '.js';
 if(program.styles === true) program.styles = componentName + '.styl';
 if(program.templates === true) program.templates = 'template.jade';
-if(program.partials === true) program.partials = 'template.jade';
 
 
-['partials', 'templates', 'styles'].forEach(function(x) {
+['templates', 'styles'].forEach(function(x) {
   if(program[x]) {
     var files = utils.parseOptionArray(program[x], extensionMap[x]);
     config.touchFiles = config.touchFiles.concat(files);

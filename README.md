@@ -46,9 +46,6 @@ Generates a angular component.
 * `-j, --javascript` - mark the component to include js file named
   `component-name.js`
 
-* `-p, --partials` - mark the component to include partial file named
-  `component-name.jade`
-
 * `-s, --styles` - mark the component to include styl file named
   `component-name.styl`
 
