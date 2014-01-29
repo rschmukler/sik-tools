@@ -5,7 +5,10 @@
   "main": "index.js",
   "bin": {
     "sik": "bin/sik",
+    "sik-api": "bin/sik-api",
     "sik-component": "bin/sik-component",
+    "sik-express-page": "bin/sik-express-page",
+    "sik-model": "bin/sik-model",
     "sik-page": "bin/sik-page"
   },
   "scripts": {
